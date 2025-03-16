@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: phishing-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/phishing_detector
+      - FLASK_APP=simple_app.py
+      - FLASK_ENV=development
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+    networks:
+      - phishing-network
+    restart: always
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - phishing-network
+    # Use the startup script instead of the default command
+    command: sh -c "chmod +x /app/startup.sh && /app/startup.sh"
+
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=phishing_detector
+    volumes:
+      - ./data/postgres-data:/var/lib/postgresql/data
+    networks:
+      - phishing-network
+
+networks:
+  phishing-network:
+    driver: bridge
