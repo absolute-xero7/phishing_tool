@@ -20,8 +20,9 @@ services:
 
   frontend:
     build: ./frontend
+    container_name: phishing-frontend
     ports:
-      - "8080:3000"
+      - "3000:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -29,11 +30,11 @@ services:
       - backend
     networks:
       - phishing-network
-    # Use the startup script instead of the default command
-    command: sh -c "chmod +x /app/startup.sh && /app/startup.sh"
+    # Remove the command that references startup.sh
 
   db:
     image: postgres:14
+    container_name: phishing-db
     ports:
       - "5432:5432"
     environment:

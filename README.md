@@ -2,7 +2,7 @@
 
 A full-stack machine learning application that detects phishing attempts in URLs and emails, utilizing Python, PostgreSQL, React, and Docker.
 
-![Phishing Detection Dashboard]()
+![Phishing Detection Dashboard](home.png)
 
 ## 🔍 Overview
 
@@ -46,7 +46,7 @@ This application provides real-time detection of phishing attempts through URL a
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/phishing-detector.git
-   cd phishing-detector
+   cd phishing_tool
    ```
 
 2. Start the application:

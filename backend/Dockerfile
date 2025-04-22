@@ -10,10 +10,15 @@ RUN apt-get update && apt-get install -y postgresql-client && \
 
 COPY . .
 
-# Make the startup script executable
-RUN chmod +x startup.sh
-
 EXPOSE 5000
 
-# Use the startup script
-CMD ["./startup.sh"]
+# Command to run when container starts - inline instead of using startup.sh
+CMD bash -c "\
+    echo 'Waiting for database...' && \
+    until PGPASSWORD=postgres psql -h db -U postgres -c '\q'; do \
+    echo 'PostgreSQL is unavailable - sleeping'; \
+    sleep 1; \
+    done && \
+    echo 'PostgreSQL is up - executing application' && \
+    python init_db.py && \
+    python simple_app.py"
